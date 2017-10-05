@@ -1,6 +1,6 @@
 /*
  * Leia CSS Selector Engine
- * Copyright 2017, javcof
+ * Copyright 2017, jeffreyzhang
  */
 
 (function() {

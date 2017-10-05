@@ -34,8 +34,24 @@ window.onload = function() {
 			var body;
 			actual = Leia('body');
 			body = document.getElementsByTagName('body')[0];
-			assert.deepEqual(actual, [body], 'Leia("body") should return [body]');			
+			assert.deepEqual(actual, [body], 'Leia("body") should return [body]');
+			
+			var div1 = document.createElement('div'),
+				div2 = document.createElement('div'),
+				div3 = document.createElement('div');
+			data.appendChild(div1);
+			data.appendChild(div2);
+			data.appendChild(div3);
+			
+			actual = Leia('div', data);
+			assert.deepEqual(actual, [div1, div2, div3], 'Leia("div") should return [div. div, div]');
+			
+			data.removeChild(div1);
+			data.removeChild(div2);
+			data.removeChild(div3);
+			
+			actual = Leia('*', data);
+			assert.deepEqual(actual, [], 'Leia("*", data) should return []');
 		})();
 	});
 }
-
