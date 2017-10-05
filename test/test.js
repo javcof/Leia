@@ -14,9 +14,28 @@ window.onload = function() {
 			var color = document.createElement('div');
 			color.id = 'color';
 			data.appendChild(color);
+			
+			actual = Leia('#color');
+			assert.deepEqual(actual, [color], 'Leia("#color") should return [E#color]');
+			
+			actual = Leia('*#color');
+			assert.deepEqual(actual, [color], 'Leia("*#color") should return [E#color]');
+			
+			actual = Leia('div#color');
+			assert.deepEqual(actual, [color], 'Leia("div#color") should return [div#color]');
+			
+			actual = Leia('span#color');
+			assert.deepEqual(actual, [], 'Leia("span#color") should return []');
+						
+			data.removeChild(color);
 		})();
-		actual = Leia('#color');
-		assert.deepEqual(actual, [color], 'Leia("color") should return [element#color]');
+		
+		(function() {
+			var body;
+			actual = Leia('body');
+			body = document.getElementsByTagName('body')[0];
+			assert.deepEqual(actual, [body], 'Leia("body") should return [body]');			
+		})();
 	});
 }
 
