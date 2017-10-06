@@ -4,7 +4,21 @@
  */
 
 (function() {
-	var i = 0;
+	var i = 0,
+		slice = function(obj) {
+			var arr = [];
+			try {
+				// (IE8-)NodeLists are host objects, using the Array.prototype.slice method on host objects is not guaranteed to work
+				// https://stackoverflow.com/questions/13317752/array-prototype-slice-this-is-not-a-javascript-object-error-in-ie8
+				// https://stackoverflow.com/questions/2735067/how-to-convert-a-dom-node-list-to-an-array-in-javascript
+				arr = [].slice.apply(obj);
+			} catch (e) {
+				for (var i = 0, len = obj.length; i < len; i++) {
+					arr.push(obj[i]);
+				}
+			}
+			return arr;
+		};
 
 	var Leia = function(selector, context, results) {
 		var elem, eles, m, match, set;
@@ -37,7 +51,7 @@
 		}
 		
 		if (!set) {
-			set = document.getElementsByTagName('*');
+			set = slice(context.getElementsByTagName('*'));
 		}
 		
 		return { expr: expr, set: set };
@@ -82,12 +96,15 @@
 			},
 			TAG: function(match, context) {
 				var eles = context.getElementsByTagName(match[1]);
-				return [].slice.apply(eles, []);
+				return slice(eles);
 			}
 		},
 		filter: {
 			TAG: function(elem, match) {
 				return (elem.nodeType === 1 && match[1] === '*') || elem.nodeName === match[1].toUpperCase();
+			},
+			CLASS: function(elem, match) {
+				return elem.className.indexOf(match[1]) !== -1;
 			}
 		}
 	}

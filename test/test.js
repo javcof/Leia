@@ -1,5 +1,6 @@
 window.onload = function() {
-	QUnit.test('Leia', function(assert) {
+	
+	QUnit.test('Leia Basic Selector', function(assert) {
 		
 		var actual, expected, 
 			data = document.getElementById('data');
@@ -44,14 +45,80 @@ window.onload = function() {
 			data.appendChild(div3);
 			
 			actual = Leia('div', data);
-			assert.deepEqual(actual, [div1, div2, div3], 'Leia("div") should return [div. div, div]');
+			assert.deepEqual(actual, [div1, div2, div3], 'Leia("div",data) should return [div, div, div]');
 			
 			data.removeChild(div1);
 			data.removeChild(div2);
 			data.removeChild(div3);
 			
+			var div = document.createElement('div'),
+				span = document.createElement('span');
+			data.appendChild(div);
+			data.appendChild(span)
+			
 			actual = Leia('*', data);
-			assert.deepEqual(actual, [], 'Leia("*", data) should return []');
+			assert.deepEqual(actual, [div, span], 'Leia("*", data) should return [div, span]');
+			
+			data.removeChild(div);
+			data.removeChild(span);
 		})();
 	});
+	
+	QUnit.test('Leia Class Selector', function(assert) {
+		var actual, expected, 
+			data = document.getElementById('data');
+			
+		(function() {
+			var red = document.createElement('div'),
+				blue = document.createElement('div'),
+				green = document.createElement('span');
+			
+			red.className = 'red';
+			blue.className = 'blue';
+			green.className = 'green';
+			
+			data.appendChild(red);
+			data.appendChild(blue);
+			data.appendChild(green);
+			
+			actual = Leia('.red');
+			assert.deepEqual(actual, [red], 'Leia(".red") should return [E.red]');
+			
+			actual = Leia('.red', data);
+			assert.deepEqual(actual, [red], 'Leia(".red", E) should return [E.red]');
+			
+			actual = Leia('div.red');
+			assert.deepEqual(actual, [red], 'Leia("div.red") should return [E.red]');
+			
+			actual = Leia('span.red');
+			assert.deepEqual(actual, [], 'Leia("span.red") should return []');
+			
+			data.removeChild(red);
+			data.removeChild(blue);
+			data.removeChild(green);
+			
+			var colorred = document.createElement('div'),
+				colorblue = document.createElement('div'),
+				colorgreen = document.createElement('span');
+				
+			colorred.className = 'color red';
+			colorblue.className = 'color blue';
+			colorgreen.className = 'color green';
+			
+			data.appendChild(colorred);
+			data.appendChild(colorblue);
+			data.appendChild(colorgreen);
+			
+			actual = Leia('.red');
+			assert.deepEqual(actual, [colorred], 'Leia(".red") should return [E.color.red]');
+			
+			actual = Leia('.red', data);
+			assert.deepEqual(actual, [colorred], 'Leia(".red", E) should return [E.color.red]');
+			
+			data.removeChild(colorred);
+			data.removeChild(colorblue);
+			data.removeChild(colorgreen);
+			
+		})();
+	});	
 }
