@@ -104,7 +104,7 @@
 				return (elem.nodeType === 1 && match[1] === '*') || elem.nodeName === match[1].toUpperCase();
 			},
 			CLASS: function(elem, match) {
-				return elem.className.indexOf(match[1]) !== -1;
+				return (' ' + elem.className + ' ').indexOf(' ' + match[1] + ' ') !== -1;
 			}
 		}
 	}

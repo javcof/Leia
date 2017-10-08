@@ -118,7 +118,25 @@ window.onload = function() {
 			data.removeChild(colorred);
 			data.removeChild(colorblue);
 			data.removeChild(colorgreen);
+
+			var prefixred = document.createElement('div'),
+				suffixred = document.createElement('span'),
+				middlered = document.createElement('div');
 			
+			prefixred.className = 'prefixred';
+			suffixred.className = 'redsuffix';
+			middlered.className = 'prefixredsuffix';
+			
+			data.appendChild(prefixred);
+			data.appendChild(suffixred);
+			data.appendChild(middlered);
+			
+			actual = Leia('.red', data);
+			assert.deepEqual(actual, [], 'Leia(".red", E) should return []');
+			assert.deepEqual(actual, [], 'Leia(".red", E) should return []');
+			assert.deepEqual(actual, [], 'Leia(".red", E) should return []');
+			
+			data.removeChild(prefixred);
 		})();
 	});	
 }
