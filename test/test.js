@@ -138,5 +138,29 @@ window.onload = function() {
 			
 			data.removeChild(prefixred);
 		})();
-	});	
+	});
+	
+	QUnit.test('Leia Hierarchy Selector', function(assert) {
+		var actual, expected, 
+			data = document.getElementById('data');
+			
+		(function() {
+			var red = document.createElement('div'),
+				blue = document.createElement('div'),
+				green = document.createElement('span'),
+				color = document.createElement('color');
+			
+			red.className = 'red';
+			blue.className = 'blue';
+			green.className = 'green';
+			
+			data.appendChild(color);
+			color.appendChild(red);
+			color.appendChild(blue);
+			color.appendChild(green);
+			
+			actual = Leia('#data .red');
+			assert.deepEqual(actual, [red], 'Leia("#data .red") should return [E.red]');
+		})();
+	});
 }

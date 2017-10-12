@@ -5,10 +5,11 @@
 
 (function() {
 	var i = 0,
+		chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
 		slice = function(obj) {
 			var arr = [];
 			try {
-				// (IE8-)NodeLists are host objects, using the Array.prototype.slice method on host objects is not guaranteed to work
+				// NodeLists are host objects, using the Array.prototype.slice method on host objects is not guaranteed to work.
 				// https://stackoverflow.com/questions/13317752/array-prototype-slice-this-is-not-a-javascript-object-error-in-ie8
 				// https://stackoverflow.com/questions/2735067/how-to-convert-a-dom-node-list-to-an-array-in-javascript
 				arr = [].slice.apply(obj);
@@ -21,7 +22,7 @@
 		};
 
 	var Leia = function(selector, context, results) {
-		var elem, eles, m, match, set;
+		var elem, eles, m, match, set, pop, combinator = '', parts = [];
 		
 		context = context || document;
 		results = results || [];
@@ -30,8 +31,36 @@
 			return results;
 		}
 		
-		var ret = Leia.find(selector, context);
-		results = Leia.filter(ret.expr, ret.set);
+		while (m = chunker.exec(selector)) {
+			parts.push(m[1]);
+		}
+		
+		if (false && (parts.length > 1)) {
+			
+		} else {
+			var ret = Leia.find(parts.pop(), context);
+			set = Leia.filter(ret.expr, ret.set);
+			
+			if (parts.length > 0) {
+				pop = parts.pop();
+				if (!Leia.selectors.relative[pop]) {
+					combinator = ' ';
+				} else {
+					combinator = pop;
+					pop = parts.pop();
+				}
+				
+				Leia.selectors.relative[combinator](set, pop);
+			}
+		}
+		
+		if (set) {
+			for (var i = 0, len = set.length; i < len; i++) {
+				if (set[i]) {
+					results.push(set[i]);
+				}
+			}
+		}
 		
 		return results;
 	}
@@ -100,11 +129,35 @@
 			}
 		},
 		filter: {
+			ID: function(elem, match) {
+				return elem.id === match[1];
+			},
 			TAG: function(elem, match) {
 				return (elem.nodeType === 1 && match[1] === '*') || elem.nodeName === match[1].toUpperCase();
 			},
 			CLASS: function(elem, match) {
 				return (' ' + elem.className + ' ').indexOf(' ' + match[1] + ' ') !== -1;
+			}
+		},
+		relative: {
+			' ': function(set, expr) {
+				for (var i = 0, len = set.length; i < len; i++) {
+					var elem = set[i], 
+						parent = elem.parentNode;
+					while (parent) {
+						var _set = Leia.filter(expr, [parent]);
+						if (_set.length === 1) {
+							break;
+						}
+						parent = parent.parentNode;
+						if (!parent) {
+							set[i] = false;
+						}
+					}
+				}
+			},
+			'>': function() {
+				
 			}
 		}
 	}
