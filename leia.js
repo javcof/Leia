@@ -140,6 +140,9 @@
 			}
 		},
 		relative: {
+			// 后代选择器
+			// http://www.w3school.com.cn/css/css_selector_descendant.asp
+			// http://www.w3.org/TR/css3-selectors/#descendant-combinators
 			' ': function(set, expr) {
 				for (var i = 0, len = set.length; i < len; i++) {
 					var elem = set[i], 
@@ -156,6 +159,9 @@
 					}
 				}
 			},
+			// 父子选择器
+			// http://www.w3school.com.cn/css/css_selector_child.asp
+			// http://www.w3.org/TR/css3-selectors/#child-combinators
 			'>': function() {
 				
 			}
