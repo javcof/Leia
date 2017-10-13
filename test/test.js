@@ -161,6 +161,9 @@ window.onload = function() {
 			
 			actual = Leia('#data .red');
 			assert.deepEqual(actual, [red], 'Leia("#data .red") should return [E.red]');
+			
+			actual = Leia('#other .red');
+			assert.deepEqual(actual, [], 'Leia("#other .red") should return []');
 		})();
 	});
 }
