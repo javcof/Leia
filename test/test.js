@@ -166,4 +166,19 @@ window.onload = function() {
 			assert.deepEqual(actual, [], 'Leia("#other .red") should return []');
 		})();
 	});
+	
+	QUnit.test('Leia Multiple Selector', function(assert) {
+		var actual, expected,
+			data = document.getElementById('data'),
+			head = document.head || document.getElementsByTagName('head')[0],
+			body = document.body || document.getElementsByTagName('body')[0];
+			
+		actual = Leia('head,body');
+		assert.deepEqual(actual, [head, body], 'Leia("head,body") should return [HEAD,BODY]');
+		
+		/*
+		actual = Leia('body,head');
+		assert.deepEqual(actual, [document.head, document.body], 'Leia("body,head") should return [HEAD,BODY]');
+		*/
+	});
 }

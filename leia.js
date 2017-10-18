@@ -22,7 +22,7 @@
 		};
 
 	var Leia = function(selector, context, results) {
-		var elem, eles, m, match, set, pop, combinator = '', parts = [];
+		var elem, eles, m, match, set, pop, extra, combinator = '', parts = [];
 		
 		context = context || document;
 		results = results || [];
@@ -31,8 +31,16 @@
 			return results;
 		}
 		
+		// reset regexp index
+		// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex
+		chunker.lastIndex = 0;
 		while (m = chunker.exec(selector)) {
 			parts.push(m[1]);
+			
+			if (m[2]) {
+				extra = RegExp.rightContext;
+				break;
+			}
 		}
 		
 		if (false && (parts.length > 1)) {
@@ -61,6 +69,13 @@
 				}
 			}
 		}
+		
+		if (extra) {
+			Leia(extra, context, results);
+		}
+		
+		// todo: element sort
+		// elementSort(results);
 		
 		return results;
 	}
