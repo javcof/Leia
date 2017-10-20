@@ -19,6 +19,16 @@
 				}
 			}
 			return arr;
+		},
+		sortOrder = function(node, otherNode) {
+			var ret = 0;
+			if (node.compareDocumentPosition) {
+				// https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+				ret = (node.compareDocumentPosition(otherNode) & 4) ? -1 : 1;
+			} else if (node.sourceIndex && otherNode.sourceIndex) {
+				ret = node.sourceIndex - otherNode.sourceIndex;
+			}
+			return ret;
 		};
 
 	var Leia = function(selector, context, results) {
@@ -74,8 +84,8 @@
 			Leia(extra, context, results);
 		}
 		
-		// todo: element sort
-		// elementSort(results);
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+		results.sort(sortOrder);
 		
 		return results;
 	}

@@ -176,9 +176,7 @@ window.onload = function() {
 		actual = Leia('head,body');
 		assert.deepEqual(actual, [head, body], 'Leia("head,body") should return [HEAD,BODY]');
 		
-		/*
 		actual = Leia('body,head');
-		assert.deepEqual(actual, [document.head, document.body], 'Leia("body,head") should return [HEAD,BODY]');
-		*/
+		assert.deepEqual(actual, [head, body], 'Leia("body,head") should return [HEAD,BODY]');
 	});
 }
