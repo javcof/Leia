@@ -86,6 +86,11 @@
 		
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 		results.sort(sortOrder);
+		for (var i = 1; i < results.length; i++) {
+			if (results[i - 1] === results[i]) {
+				results.splice(i, 1);
+			}
+		}
 		
 		return results;
 	}

@@ -170,6 +170,7 @@ window.onload = function() {
 	QUnit.test('Leia Multiple Selector', function(assert) {
 		var actual, expected,
 			data = document.getElementById('data'),
+			html = document.documentElement,
 			head = document.head || document.getElementsByTagName('head')[0],
 			body = document.body || document.getElementsByTagName('body')[0];
 			
@@ -178,5 +179,11 @@ window.onload = function() {
 		
 		actual = Leia('body,head');
 		assert.deepEqual(actual, [head, body], 'Leia("body,head") should return [HEAD,BODY]');
+		
+		actual = Leia('body,head,html');
+		assert.deepEqual(actual, [html, head, body], 'Leia("body,head,html") should return [HTML,HEAD,BODY]');
+		
+		actual = Leia('body,head,body,head');
+		assert.deepEqual(actual, [head, body], 'Leia("body,head,body,head") should return [HEAD,BODY]');
 	});
 }
