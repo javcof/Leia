@@ -1,35 +1,42 @@
 window.onload = function() {
 	
-	QUnit.test('Leia Basic Selector', function(assert) {
+	QUnit.test('Leia', function(assert) {
 		
-		var actual, expected, 
-			data = document.getElementById('data');
-		
+		var actual, expected;
+			
 		actual = Leia(null);
 		assert.deepEqual(actual, [], 'Leia(null) should return []');
 		
 		actual = Leia(function() {});
 		assert.deepEqual(actual, [], 'Leia(function type) should return []');
 		
-		(function() {
-			var color = document.createElement('div');
-			color.id = 'color';
-			data.appendChild(color);
+		actual = Leia('head', {});
+		assert.deepEqual(actual, [], 'Leia("head", {}) should return []');
+	});
+	
+	QUnit.test('Leia All Selector', function(assert) {
+		
+		var actual, expected, 
+			data = document.getElementById('data');
+		
+		(function() {			
+			var div = document.createElement('div'),
+				span = document.createElement('span');
+			data.appendChild(div);
+			data.appendChild(span)
 			
-			actual = Leia('#color');
-			assert.deepEqual(actual, [color], 'Leia("#color") should return [E#color]');
+			actual = Leia('*', data);
+			assert.deepEqual(actual, [div, span], 'Leia("*", data) should return [div, span]');
 			
-			actual = Leia('*#color');
-			assert.deepEqual(actual, [color], 'Leia("*#color") should return [E#color]');
-			
-			actual = Leia('div#color');
-			assert.deepEqual(actual, [color], 'Leia("div#color") should return [div#color]');
-			
-			actual = Leia('span#color');
-			assert.deepEqual(actual, [], 'Leia("span#color") should return []');
-						
-			data.removeChild(color);
+			data.removeChild(div);
+			data.removeChild(span);
 		})();
+	});
+	
+	QUnit.test('Leia Element Selector', function(assert) {
+		
+		var actual, expected, 
+			data = document.getElementById('data');
 		
 		(function() {
 			var body;
@@ -50,17 +57,32 @@ window.onload = function() {
 			data.removeChild(div1);
 			data.removeChild(div2);
 			data.removeChild(div3);
+		})();
+	});
+	
+	QUnit.test('Leia ID Selector', function(assert) {
+		
+		var actual, expected, 
+			data = document.getElementById('data');
+		
+		(function() {
+			var color = document.createElement('div');
+			color.id = 'color';
+			data.appendChild(color);
 			
-			var div = document.createElement('div'),
-				span = document.createElement('span');
-			data.appendChild(div);
-			data.appendChild(span)
+			actual = Leia('#color');
+			assert.deepEqual(actual, [color], 'Leia("#color") should return [E#color]');
 			
-			actual = Leia('*', data);
-			assert.deepEqual(actual, [div, span], 'Leia("*", data) should return [div, span]');
+			actual = Leia('*#color');
+			assert.deepEqual(actual, [color], 'Leia("*#color") should return [E#color]');
 			
-			data.removeChild(div);
-			data.removeChild(span);
+			actual = Leia('div#color');
+			assert.deepEqual(actual, [color], 'Leia("div#color") should return [div#color]');
+			
+			actual = Leia('span#color');
+			assert.deepEqual(actual, [], 'Leia("span#color") should return []');
+						
+			data.removeChild(color);
 		})();
 	});
 	

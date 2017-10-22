@@ -37,10 +37,15 @@
 		context = context || document;
 		results = results || [];
 	 
-		if (!selector || typeof selector !== 'string') {
+		// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+		if (context.nodeType !== 1 && context.nodeType !== 9) {
 			return results;
 		}
 		
+		if (!selector || typeof selector !== 'string') {
+			return results;
+		}
+
 		// reset regexp index
 		// https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex
 		chunker.lastIndex = 0;
